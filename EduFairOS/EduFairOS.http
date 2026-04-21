@@ -1,0 +1,6 @@
+@EduFairOS_HostAddress = http://localhost:5231
+
+GET {{EduFairOS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
