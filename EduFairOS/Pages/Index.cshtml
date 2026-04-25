@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model EduFairOS.Pages.IndexModel
 @{
     ViewData["Title"] = "EduFairOS - Dashboard";
@@ -20,7 +20,6 @@
                 </div>
                 <div class="card-body">
                     <form method="post">
-                        <div asp-validation-summary="All" class="alert alert-danger fw-bold mb-3"></div>
                         <input type="hidden" asp-for="NewStand.Id" />
 
                         <div class="mb-3">
@@ -49,7 +48,7 @@
                             <label class="form-label">Descripción</label>
                             <textarea asp-for="NewStand.Descripcion" class="form-control"></textarea>
                         </div>
-                        
+
                         <button type="submit" class="btn @(Model.NewStand.Id > 0 ? "btn-warning" : "btn-success") w-100 fw-bold">
                             @(Model.NewStand.Id > 0 ? "Actualizar stand" : "Guardar stand")
                         </button>
@@ -98,3 +97,51 @@
             <div class="card">
                 <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">Directorio de Stands Registrados</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Stands.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Ubicación</th>
+                                        <th>Categoría</th>
+                                        <th>Evento</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stand in Model.Stands)
+                                    {
+                                        <tr>
+                                            <td><strong>@stand.Nombre</strong></td>
+                                            <td>@stand.Ubicacion</td>
+                                            <td>@stand.Categoria</td>
+                                            <td>@Model.GetEventoNombre(stand.IdEvento)</td>
+                                            <td>
+                                                <a asp-page="./Index" asp-route-editId="@stand.Id" class="btn btn-sm btn-outline-warning me-1">Editar</a>
+
+                                                <form method="post" asp-page-handler="Delete" asp-route-id="@stand.Id" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            onclick="return confirm('¿Seguro que deseas eliminar este stand?');">
+                                                        Borrar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary">No hay stands registrados en el sistema.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model EduFairOS.Pages.EventosModel
 @{
     ViewData["Title"] = "Eventos";
@@ -15,11 +15,13 @@
     <div class="row">
         <div class="col-lg-5">
             <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Crear nuevo evento</h5>
+                <div class="card-header @(Model.NewEvento.Id > 0 ? "bg-warning text-dark" : "bg-success text-white")">
+                    <h5 class="mb-0">@(Model.NewEvento.Id > 0 ? "Editar evento" : "Crear nuevo evento")</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
+                        <input type="hidden" asp-for="NewEvento.Id" />
+
                         <div class="mb-3">
                             <label class="form-label">Nombre del Evento</label>
                             <input asp-for="NewEvento.Nombre" class="form-control" placeholder="Ej: Feria Científica 2026" />
@@ -51,7 +53,15 @@
                             <label class="form-label">Descripción</label>
                             <textarea asp-for="NewEvento.Descripcion" class="form-control"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Registrar Evento</button>
+
+                        <button type="submit" class="btn @(Model.NewEvento.Id > 0 ? "btn-warning" : "btn-success") w-100 fw-bold">
+                            @(Model.NewEvento.Id > 0 ? "Actualizar Evento" : "Registrar Evento")
+                        </button>
+
+                        @if (Model.NewEvento.Id > 0)
+                        {
+                            <a href="/Eventos" class="btn btn-secondary w-100 mt-2">Cancelar Edición</a>
+                        }
                     </form>
                 </div>
             </div>
@@ -66,13 +76,14 @@
                     @if (Model.Eventos.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover align-middle">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Lugar</th>
                                         <th>Fechas</th>
                                         <th>Estado</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,8 +92,23 @@
                                         <tr>
                                             <td><strong>@evento.Nombre</strong></td>
                                             <td>@evento.Lugar</td>
-                                            <td>@evento.FechaInicio.ToString("dd/MM/yyyy") - @evento.FechaFin.ToString("dd/MM/yyyy")</td>
+                                            <td>
+                                                <small>
+                                                    @evento.FechaInicio.ToString("dd/MM/yyyy")<br />
+                                                    @evento.FechaFin.ToString("dd/MM/yyyy")
+                                                </small>
+                                            </td>
                                             <td><span class="badge bg-primary">@evento.Estado</span></td>
+                                            <td>
+                                                <a asp-page="./Eventos" asp-route-editId="@evento.Id" class="btn btn-sm btn-outline-warning me-1">Editar</a>
+
+                                                <form method="post" asp-page-handler="Delete" asp-route-id="@evento.Id" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            onclick="return confirm('¿Seguro que deseas eliminar este evento?');">
+                                                        Borrar
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>

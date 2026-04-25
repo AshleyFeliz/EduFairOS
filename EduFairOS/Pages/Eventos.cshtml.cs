@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EduFairOS.Layers.Application.Contracts;
 using EduFairOS.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,19 @@ namespace EduFairOS.Pages
 			_servicioEvento = servicioEvento;
 		}
 
-		public void OnGet()
+		public void OnGet(int? editId)
 		{
 			Eventos = _servicioEvento.ObtenerTodosEventos();
+
+			// Si nos pasan un ID por la URL, cargamos el evento en el formulario
+			if (editId.HasValue)
+			{
+				var eventoAEditar = Eventos.FirstOrDefault(e => e.Id == editId.Value);
+				if (eventoAEditar != null)
+				{
+					NewEvento = eventoAEditar;
+				}
+			}
 		}
 
 		public IActionResult OnPost()
@@ -37,7 +48,17 @@ namespace EduFairOS.Pages
 
 			try
 			{
-				_servicioEvento.CrearEvento(NewEvento);
+				if (NewEvento.Id > 0)
+				{
+					// Editar evento existente
+					_servicioEvento.ActualizarEvento(NewEvento);
+				}
+				else
+				{
+					// Crear nuevo evento
+					_servicioEvento.CrearEvento(NewEvento);
+				}
+
 				return RedirectToPage();
 			}
 			catch (Exception ex)
@@ -45,6 +66,20 @@ namespace EduFairOS.Pages
 				ModelState.AddModelError(string.Empty, ex.Message);
 				return Page();
 			}
+		}
+
+		public IActionResult OnPostDelete(int id)
+		{
+			try
+			{
+				_servicioEvento.EliminarEvento(id);
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError(string.Empty, "No se pudo eliminar el evento. Verifica si tiene stands asociados.");
+			}
+
+			return RedirectToPage();
 		}
 	}
 }
