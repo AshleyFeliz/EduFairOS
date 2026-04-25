@@ -1,11 +1,11 @@
-﻿// Models/Stand.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System.Collections.Generic;
 using System;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase que representa un Stand dentro de un Evento
-	/// </summary>
+	
+	// Clase que representa un Stand dentro de un Evento
+	
 	public class Stand : EntidadBase
 	{
 		private string _nombre;

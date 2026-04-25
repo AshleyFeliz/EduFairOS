@@ -1,0 +1,126 @@
+﻿@page
+@model EduFairOS.Pages.ActividadesModel
+@{
+    ViewData["Title"] = "Actividades";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Gestión de Actividades</h1>
+            <p class="text-muted">Crea actividades, asigna horarios y vincúlalas a los stands.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header @(Model.NewActividad.Id > 0 ? "bg-warning text-dark" : "bg-primary text-white")">
+                    <h5 class="mb-0">@(Model.NewActividad.Id > 0 ? "Editar Actividad" : "Nueva Actividad")</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input type="hidden" asp-for="NewActividad.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input asp-for="NewActividad.Nombre" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea asp-for="NewActividad.Descripcion" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stand Asignado</label>
+                            <select asp-for="NewActividad.IdStand" class="form-select">
+                                <option value="0">Seleccione un stand</option>
+                                @foreach (var stand in Model.Stands)
+                                {
+                                    <option value="@stand.Id">@stand.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hora inicio</label>
+                                <input asp-for="NewActividad.HoraInicio" class="form-control" type="datetime-local" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hora fin</label>
+                                <input asp-for="NewActividad.HoraFin" class="form-control" type="datetime-local" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Capacidad máxima</label>
+                            <input asp-for="NewActividad.CapacidadMaxima" class="form-control" type="number" min="1" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nivel</label>
+                            <input asp-for="NewActividad.Nivel" class="form-control" placeholder="Ej: Básico, Intermedio..." />
+                        </div>
+                        
+                        <button type="submit" class="btn @(Model.NewActividad.Id > 0 ? "btn-warning" : "btn-success") w-100 fw-bold">
+                            @(Model.NewActividad.Id > 0 ? "Actualizar Actividad" : "Guardar Actividad")
+                        </button>
+
+                        @if (Model.NewActividad.Id > 0)
+                        {
+                            <a href="/Actividades" class="btn btn-secondary w-100 mt-2">Cancelar Edición</a>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Actividades Registradas</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Actividades.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Stand</th>
+                                        <th>Horario</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var actividad in Model.Actividades)
+                                    {
+                                        <tr>
+                                            <td><strong>@actividad.Nombre</strong></td>
+                                            <td>@Model.GetStandNombre(actividad.IdStand)</td>
+                                            <td>
+                                                <small>
+                                                    @actividad.HoraInicio.ToString("g")<br />
+                                                    @actividad.HoraFin.ToString("g")
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <a asp-page="./Actividades" asp-route-editId="@actividad.Id" class="btn btn-sm btn-outline-primary mb-1 w-100">Editar</a>
+                                                
+                                                <form method="post" asp-page-handler="Delete" asp-route-id="@actividad.Id">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100" onclick="return confirm('¿Seguro que deseas borrar esta actividad?');">Borrar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary">No hay actividades registradas en el sistema.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

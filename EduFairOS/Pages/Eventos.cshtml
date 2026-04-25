@@ -1,0 +1,100 @@
+﻿@page
+@model EduFairOS.Pages.EventosModel
+@{
+    ViewData["Title"] = "Eventos";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Gestión de Eventos</h1>
+            <p class="text-muted">Planifica y administra las ferias escolares de la institución.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Crear nuevo evento</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre del Evento</label>
+                            <input asp-for="NewEvento.Nombre" class="form-control" placeholder="Ej: Feria Científica 2026" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha de Inicio</label>
+                                <input asp-for="NewEvento.FechaInicio" class="form-control" type="datetime-local" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha de Fin</label>
+                                <input asp-for="NewEvento.FechaFin" class="form-control" type="datetime-local" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Lugar</label>
+                            <input asp-for="NewEvento.Lugar" class="form-control" placeholder="Ej: Auditorio Principal" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select asp-for="NewEvento.Estado" class="form-select">
+                                <option value="Planificacion">Planificación</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Finalizado">Finalizado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea asp-for="NewEvento.Descripcion" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Registrar Evento</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Historial de Eventos</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Eventos.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Lugar</th>
+                                        <th>Fechas</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var evento in Model.Eventos)
+                                    {
+                                        <tr>
+                                            <td><strong>@evento.Nombre</strong></td>
+                                            <td>@evento.Lugar</td>
+                                            <td>@evento.FechaInicio.ToString("dd/MM/yyyy") - @evento.FechaFin.ToString("dd/MM/yyyy")</td>
+                                            <td><span class="badge bg-primary">@evento.Estado</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary">No hay eventos registrados en el sistema.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

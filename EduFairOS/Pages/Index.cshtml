@@ -1,0 +1,100 @@
+﻿@page
+@model EduFairOS.Pages.IndexModel
+@{
+    ViewData["Title"] = "EduFairOS - Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>EduFairOS</h1>
+            <p class="lead">Interfaz central de administración de ferias escolares.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header @(Model.NewStand.Id > 0 ? "bg-warning text-dark" : "bg-primary text-white")">
+                    <h5 class="mb-0">@(Model.NewStand.Id > 0 ? "Editar Stand" : "Crear nuevo stand")</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger fw-bold mb-3"></div>
+                        <input type="hidden" asp-for="NewStand.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input asp-for="NewStand.Nombre" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ubicación</label>
+                            <input asp-for="NewStand.Ubicacion" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <input asp-for="NewStand.Categoria" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Evento Asignado</label>
+                            <select asp-for="NewStand.IdEvento" class="form-select">
+                                <option value="0">Seleccione un evento</option>
+                                @foreach (var evento in Model.Eventos)
+                                {
+                                    <option value="@evento.Id">@evento.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea asp-for="NewStand.Descripcion" class="form-control"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn @(Model.NewStand.Id > 0 ? "btn-warning" : "btn-success") w-100 fw-bold">
+                            @(Model.NewStand.Id > 0 ? "Actualizar stand" : "Guardar stand")
+                        </button>
+
+                        @if (Model.NewStand.Id > 0)
+                        {
+                            <a href="/" class="btn btn-secondary w-100 mt-2">Cancelar Edición</a>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Eventos Activos</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Eventos.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var evento in Model.Eventos)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@evento.Nombre</strong><br />
+                                        <small class="text-muted">@evento.Lugar</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">@evento.Estado</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border">No hay eventos registrados. Ve a la pestaña Eventos para crear uno.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Directorio de Stands Registrados</h5>

@@ -1,10 +1,10 @@
-﻿// Models/EntidadBase.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase base para todas las entidades con campos comunes
-	/// </summary>
+	
+	// Clase base para todas las entidades con campos comunes
+	
 	public abstract class EntidadBase
 	{
 		public int Id { get; set; }
@@ -12,9 +12,9 @@ namespace EduFairOS.Models
 		public DateTime FechaActualizacion { get; set; } = DateTime.Now;
 		public bool Activo { get; set; } = true;
 
-		/// <summary>
-		/// Método para actualizar la fecha de modificación
-		/// </summary>
+		
+		// Método para actualizar la fecha de modificación
+		
 		protected void ActualizarFecha()
 		{
 			FechaActualizacion = DateTime.Now;

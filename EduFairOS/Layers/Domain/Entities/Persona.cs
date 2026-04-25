@@ -1,10 +1,10 @@
-﻿// Models/Persona.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase abstracta que representa una persona
-	/// </summary>
+	
+	// Clase abstracta que representa una persona
+	
 	public abstract class Persona : EntidadBase
 	{
 		private string _nombre;

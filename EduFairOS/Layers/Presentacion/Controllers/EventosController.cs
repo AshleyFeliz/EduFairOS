@@ -1,6 +1,6 @@
-﻿// ProyectoFE/Layers/Presentación/Controllers/EventosController.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using Microsoft.AspNetCore.Mvc;
-using EduFairOS.Models; // Usamos el namespace de nuestras entidades
+using EduFairOS.Models; 
 using EduFairOS.Layers.Application.Services;
 
 namespace EduFairOS.Layers.Presentacion.Controllers
@@ -24,7 +24,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			return Ok(eventos);
 		}
 
-		// GET: api/Eventos/5
+		// GET: api/Eventos/
 		[HttpGet("{id}")]
 		public ActionResult<Evento> GetEvento(int id)
 		{
@@ -54,7 +54,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// PUT: api/Eventos/5
+		// PUT: api/Eventos/
 		[HttpPut("{id}")]
 		public IActionResult PutEvento(int id, Evento evento)
 		{
@@ -74,7 +74,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// DELETE: api/Eventos/5
+		// DELETE: api/Eventos/
 		[HttpDelete("{id}")]
 		public IActionResult DeleteEvento(int id)
 		{

@@ -1,31 +1,36 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Collections.Generic;
-using EduFairOS.Models; // Usamos el namespace que mantuvimos en las entidades
-using EduFairOS.Layers.Infrastructure.Data;
+using System.Linq;
+using EduFairOS.Models;
+using EduFairOS.Layers.Application.Contracts;
+using EduFairOS.Layers.Infrastructure.Interfaces;
+
 
 namespace EduFairOS.Layers.Application.Services
 {
-	/// <summary>
-	/// Clase de servicio para la lógica de negocio de Eventos
-	/// Actúa como intermediaria entre la capa de presentación y la de datos
-	/// </summary>
-	public class ServicioEvento
+	/// Servicio de aplicación para manejar la lógica de negocio de eventos.
+	/// Actúa como intermediaria entre la capa de presentación y la capa de datos.
+	
+	public class ServicioEvento : IServicioEvento
 	{
-		private RepositorioEvento _repositorio;
+		private readonly IRepositorio<Evento> _repositorio;
 
-		public ServicioEvento()
+		/// Constructor que recibe un repositorio de eventos.
+		public ServicioEvento(IRepositorio<Evento> repositorio)
 		{
-			_repositorio = new RepositorioEvento();
+			_repositorio = repositorio;
 		}
 
+	
+		/// Crea un nuevo evento aplicando validaciones de negocio.
 		public bool CrearEvento(Evento evento)
 		{
 			if (evento == null) throw new ArgumentNullException(nameof(evento));
 			if (string.IsNullOrEmpty(evento.Nombre) || evento.Nombre.Length < 3)
 				throw new Exception("El nombre del evento debe tener al menos 3 caracteres");
 
-			// Reemplazo de evento.ValidarFechas() que faltaba en el modelo del maestro
+
 			if (evento.FechaInicio >= evento.FechaFin)
 				throw new Exception("La fecha de inicio debe ser anterior a la fecha de fin");
 
@@ -38,6 +43,8 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Agregar(evento);
 		}
 
+		/// Obtiene un evento por su ID.
+	
 		public Evento ObtenerEvento(int id)
 		{
 			if (id <= 0) throw new ArgumentException("El ID debe ser mayor a 0");
@@ -45,25 +52,37 @@ namespace EduFairOS.Layers.Application.Services
 			if (evento == null) throw new Exception($"No se encontró evento con ID {id}");
 			return evento;
 		}
-
+		/// Obtiene un evento por su nombre.
+		
+		public Evento ObtenerEvento(string nombre)
+		{
+			if (string.IsNullOrWhiteSpace(nombre)) return null;
+			return _repositorio.ObtenerPor(e => e.Nombre.Equals(nombre.Trim(), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+		}
+		/// Obtiene todos los eventos activos.
+		
 		public List<Evento> ObtenerTodosEventos()
 		{
 			return _repositorio.ObtenerTodos();
 		}
 
+		/// Actualiza un evento existente aplicando validaciones de negocio.
+		
 		public bool ActualizarEvento(Evento evento)
 		{
 			if (evento == null) throw new ArgumentNullException(nameof(evento));
 			if (!_repositorio.Existe(evento.Id))
 				throw new Exception($"No existe evento con ID {evento.Id}");
 
-			// Reemplazo de evento.ValidarFechas()
+
 			if (evento.FechaInicio >= evento.FechaFin)
 				throw new Exception("La fecha de inicio debe ser anterior a la fecha de fin");
 
 			return _repositorio.Actualizar(evento);
 		}
 
+		/// Cancela un evento cambiando su estado a "Cancelado".
+		
 		public bool CancelarEvento(int id)
 		{
 			Evento evento = ObtenerEvento(id);
@@ -71,6 +90,8 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Actualizar(evento);
 		}
 
+		/// Activa un evento cambiando su estado a "Activo" si la fecha de inicio no ha pasado.
+		
 		public bool ActivarEvento(int id)
 		{
 			Evento evento = ObtenerEvento(id);
@@ -82,15 +103,16 @@ namespace EduFairOS.Layers.Application.Services
 			throw new Exception("No se puede activar un evento cuya fecha de inicio ya pasó");
 		}
 
+		/// Finaliza un evento cambiando su estado a "Finalizado".
+		
 		public bool FinalizarEvento(int id)
 		{
 			Evento evento = ObtenerEvento(id);
 			evento.Estado = "Finalizado";
 			return _repositorio.Actualizar(evento);
 		}
-		/// <summary>
-		/// Elimina un evento
-		/// </summary>
+		/// Elimina un evento por su ID.
+		
 		public bool EliminarEvento(int id)
 		{
 			var evento = ObtenerEvento(id);

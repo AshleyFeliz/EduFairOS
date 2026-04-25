@@ -1,11 +1,11 @@
-﻿// Models/Actividad.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Collections.Generic;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase que representa una Actividad dentro de un Stand
-	/// </summary>
+	
+	// Clase que representa una Actividad dentro de un Stand
+	
 	public class Actividad : EntidadBase
 	{
 		private string _nombre;

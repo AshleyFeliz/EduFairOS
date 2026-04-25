@@ -1,21 +1,30 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EduFairOS.Models;
-using EduFairOS.Layers.Infrastructure.Data;
+using EduFairOS.Layers.Application.Contracts;
+using EduFairOS.Layers.Infrastructure.Interfaces;
 
 namespace EduFairOS.Layers.Application.Services
 {
-	public class ServicioParticipante
+	
+	/// Servicio de aplicación para manejar la lógica de negocio de participantes.
+	/// Actúa como intermediaria entre la capa de presentación y la capa de datos.
+	public class ServicioParticipante : IServicioParticipante
 	{
-		private RepositorioParticipante _repositorio;
+		private readonly IRepositorio<Participante> _repositorio;
 
-		public ServicioParticipante()
+		/// Constructor que recibe un repositorio de participantes.
+		
+		public ServicioParticipante(IRepositorio<Participante> repositorio)
 		{
-			_repositorio = new RepositorioParticipante();
+			_repositorio = repositorio;
 		}
 
-		// Método auxiliar para reemplazar ObtenerCategoriaEdad() que faltaba
+
+		/// Método privado que determina la categoría de edad de un participante.
+		
 		private string ObtenerCategoria(int edad)
 		{
 			if (edad <= 12) return "Infantil";
@@ -23,18 +32,20 @@ namespace EduFairOS.Layers.Application.Services
 			return "Adulto";
 		}
 
+		/// Registra un nuevo participante aplicando validaciones de negocio.
+		
 		public bool RegistrarParticipante(Participante participante)
 		{
 			if (participante == null) throw new ArgumentNullException(nameof(participante));
 
-			// Reemplazo de participante.ValidarDatos()
+
 			if (string.IsNullOrEmpty(participante.Nombre) || string.IsNullOrEmpty(participante.Institucion))
 				throw new Exception("Los datos del participante son inválidos");
 
 			if (participante.Edad < 5 || participante.Edad > 20)
 				throw new Exception("La edad del participante debe estar entre 5 y 20 años");
 
-			// Reemplazo de participante.ValidarCorreo()
+
 			if (!string.IsNullOrEmpty(participante.Correo) && !participante.Correo.Contains("@"))
 				throw new Exception("El correo del participante es inválido");
 
@@ -42,6 +53,8 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Agregar(participante);
 		}
 
+		/// Obtiene un participante por su ID.
+		
 		public Participante ObtenerParticipante(int id)
 		{
 			Participante participante = _repositorio.ObtenerPorId(id);
@@ -49,22 +62,30 @@ namespace EduFairOS.Layers.Application.Services
 			return participante;
 		}
 
+		/// Obtiene todos los participantes activos.
+		
 		public List<Participante> ObtenerTodosParticipantes()
 		{
 			return _repositorio.ObtenerTodos();
 		}
 
+		/// Obtiene participantes filtrados por institución.
+		
 		public List<Participante> ObtenerPorInstitucion(string institucion)
 		{
 			return _repositorio.ObtenerPor(p => p.Institucion.Equals(institucion, StringComparison.OrdinalIgnoreCase));
 		}
 
+		/// Obtiene participantes filtrados por categoría de edad.
+		
 		public List<Participante> ObtenerPorCategoriaEdad(string categoria)
 		{
-			// Usamos nuestra función auxiliar adaptada
+
 			return _repositorio.ObtenerPor(p => ObtenerCategoria(p.Edad).Equals(categoria, StringComparison.OrdinalIgnoreCase));
 		}
 
+		/// Actualiza un participante existente aplicando validaciones de negocio.
+		
 		public bool ActualizarParticipante(Participante participante)
 		{
 			if (participante == null || participante.Id <= 0) return false;
@@ -77,6 +98,8 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Actualizar(participante);
 		}
 
+		/// Elimina un participante por su ID.
+		
 		public bool EliminarParticipante(int id)
 		{
 			Participante participante = ObtenerParticipante(id);
@@ -84,11 +107,15 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Eliminar(id);
 		}
 
+		/// Busca participantes por nombre (búsqueda parcial).
+		
 		public List<Participante> BuscarPorNombre(string nombre)
 		{
 			return _repositorio.ObtenerPor(p => p.Nombre.Contains(nombre, StringComparison.OrdinalIgnoreCase));
 		}
 
+		/// Genera estadísticas de los participantes registrados.
+		
 		public string GenerarEstadisticas()
 		{
 			var participantes = _repositorio.ObtenerTodos();
@@ -101,7 +128,7 @@ namespace EduFairOS.Layers.Application.Services
 			Dictionary<string, int> porCategoria = new Dictionary<string, int>();
 			foreach (Participante p in participantes)
 			{
-				string cat = ObtenerCategoria(p.Edad); // Usamos el helper adaptado
+				string cat = ObtenerCategoria(p.Edad);
 				if (!porCategoria.ContainsKey(cat)) porCategoria[cat] = 0;
 				porCategoria[cat]++;
 			}

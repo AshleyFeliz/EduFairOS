@@ -1,13 +1,13 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Collections.Generic;
 
 namespace EduFairOS.Layers.Infrastructure.Interfaces
 {
-	/// <summary>
-	/// Interfaz genérica para operaciones CRUD
-	/// Define el contrato para las clases de acceso a datos
-	/// </summary>
+	
+	// Interfaz genérica para operaciones CRUD
+	// Define el contrato para las clases de acceso a datos
+	
 	public interface IRepositorio<T> where T : class
 	{
 		bool Agregar(T entidad);

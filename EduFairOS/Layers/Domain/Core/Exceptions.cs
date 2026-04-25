@@ -1,4 +1,4 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 
 namespace EduFairOS.Layers.Domain.Core

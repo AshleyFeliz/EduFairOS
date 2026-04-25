@@ -1,10 +1,10 @@
-﻿// Models/Evento.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase que representa un Evento de Feria Escolar
-	/// </summary>
+	
+	// Clase que representa un Evento de Feria Escolar
+	
 	public class Evento : EntidadBase
 	{
 		private string _nombre;

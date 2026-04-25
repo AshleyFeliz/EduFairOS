@@ -1,10 +1,10 @@
-﻿// Models/Asignacion.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 namespace EduFairOS.Models
 {
-	/// <summary>
-	/// Clase que representa la asignación de un participante a una actividad
-	/// </summary>
+	
+	// Clase que representa la asignación de un participante a una actividad
+	
 	public class Asignacion : EntidadBase
 	{
 		private int _idParticipante;

@@ -1,4 +1,4 @@
-﻿// ProyectoFE/Layers/Presentación/Controllers/StandsController.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using Microsoft.AspNetCore.Mvc;
 using EduFairOS.Models;
 using EduFairOS.Layers.Application.Services;
@@ -25,7 +25,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			return Ok(stands);
 		}
 
-		// GET: api/Stands/5
+		// GET: api/Stands/
 		[HttpGet("{id}")]
 		public ActionResult<Stand> GetStand(int id)
 		{
@@ -52,7 +52,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// PUT: api/Stands/5
+		// PUT: api/Stands/
 		[HttpPut("{id}")]
 		public IActionResult PutStand(int id, Stand stand)
 		{
@@ -72,7 +72,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// DELETE: api/Stands/5
+		// DELETE: api/Stands/
 		[HttpDelete("{id}")]
 		public IActionResult DeleteStand(int id)
 		{

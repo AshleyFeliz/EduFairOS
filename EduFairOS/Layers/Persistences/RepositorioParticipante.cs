@@ -1,11 +1,13 @@
-﻿using System;
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.SqlClient;
 using EduFairOS.Models;
 using EduFairOS.Layers.Infrastructure.Interfaces;
+using EduFairOS.Layers.Infrastructure.Data;
 
-namespace EduFairOS.Layers.Infrastructure.Data
+namespace EduFairOS.Layers.Persistences.Repositories
 {
 	public class RepositorioParticipante : IRepositorio<Participante>
 	{
@@ -97,7 +99,7 @@ namespace EduFairOS.Layers.Infrastructure.Data
 			return _conexion.EjecutarNonQuery(query, parameters) > 0;
 		}
 
-		// MÃ©todos faltantes de la Interfaz
+		
 		public bool Existe(int id) => ObtenerPorId(id) != null;
 		public int AgregarMultiples(List<Participante> entidades) { int c = 0; foreach (var e in entidades) if (Agregar(e)) c++; return c; }
 		public List<Participante> ObtenerPor(Func<Participante, bool> predicate) => ObtenerTodos().Where(predicate).ToList();

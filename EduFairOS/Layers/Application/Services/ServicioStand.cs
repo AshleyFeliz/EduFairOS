@@ -1,20 +1,30 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EduFairOS.Models;
-using EduFairOS.Layers.Infrastructure.Data;
+using EduFairOS.Layers.Application.Contracts;
+using EduFairOS.Layers.Infrastructure.Interfaces;
+
+/// Espacio de nombres para los servicios de aplicación de EduFairOS.
 
 namespace EduFairOS.Layers.Application.Services
 {
-	public class ServicioStand
+	/// Servicio de aplicación para manejar la lógica de negocio de stands.
+	/// Actúa como intermediaria entre la capa de presentación y la capa de datos.
+	
+	public class ServicioStand : IServicioStand
 	{
-		private RepositorioStand _repositorio;
+		private readonly IRepositorio<Stand> _repositorio;
 
-		public ServicioStand()
+		/// Constructor que recibe un repositorio de stands.
+		
+		public ServicioStand(IRepositorio<Stand> repositorio)
 		{
-			_repositorio = new RepositorioStand();
+			_repositorio = repositorio;
 		}
-
+		/// Crea un nuevo stand aplicando validaciones de negocio.
+		
 		public bool CrearStand(Stand stand)
 		{
 			if (stand == null) throw new ArgumentNullException(nameof(stand));
@@ -23,16 +33,30 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Agregar(stand);
 		}
 
+		/// Obtiene un stand por su ID.
+		
 		public Stand ObtenerStand(int id)
 		{
 			return _repositorio.ObtenerPorId(id);
 		}
 
+		/// Obtiene un stand por su nombre.
+		
+		public Stand ObtenerStand(string nombre)
+		{
+			if (string.IsNullOrWhiteSpace(nombre)) return null;
+			return _repositorio.ObtenerPor(s => s.Nombre.Equals(nombre.Trim(), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+		}
+
+		/// Obtiene todos los stands activos.
+		
 		public List<Stand> ObtenerTodosStands()
 		{
 			return _repositorio.ObtenerTodos();
 		}
 
+		/// Actualiza un stand existente.
+		
 		public bool ActualizarStand(Stand stand)
 		{
 			if (stand == null || stand.Id <= 0) return false;
@@ -41,6 +65,8 @@ namespace EduFairOS.Layers.Application.Services
 			return _repositorio.Actualizar(stand);
 		}
 
+		/// Elimina un stand por su ID.
+		
 		public bool EliminarStand(int id)
 		{
 			var stand = ObtenerStand(id);

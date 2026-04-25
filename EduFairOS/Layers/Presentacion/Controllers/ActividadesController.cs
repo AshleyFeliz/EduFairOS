@@ -1,4 +1,4 @@
-﻿// ProyectoFE/Layers/Presentación/Controllers/ActividadesController.cs
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using Microsoft.AspNetCore.Mvc;
 using EduFairOS.Models;
 using EduFairOS.Layers.Application.Services;
@@ -25,7 +25,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			return Ok(actividades);
 		}
 
-		// GET: api/Actividades/5
+		// GET: api/Actividades/
 		[HttpGet("{id}")]
 		public ActionResult<Actividad> GetActividad(int id)
 		{
@@ -52,7 +52,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// PUT: api/Actividades/5
+		// PUT: api/Actividades/
 		[HttpPut("{id}")]
 		public IActionResult PutActividad(int id, Actividad actividad)
 		{
@@ -72,7 +72,7 @@ namespace EduFairOS.Layers.Presentacion.Controllers
 			}
 		}
 
-		// DELETE: api/Actividades/5
+		// DELETE: api/Actividades/
 		[HttpDelete("{id}")]
 		public IActionResult DeleteActividad(int id)
 		{

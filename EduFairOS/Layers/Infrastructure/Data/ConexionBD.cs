@@ -1,4 +1,4 @@
-﻿
+﻿//Ashley Esmirna Feliz Rodríguez 2025-0903
 using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
@@ -17,9 +17,9 @@ namespace EduFairOS.Layers.Infrastructure.Data
 			set { _cadenaConexion = value; }
 		}
 
-		private ConexionBD()
+		public ConexionBD()
 		{
-			// Usamos tu conexión confiable
+			
 			_cadenaConexion = @"Server=ASHLEYFELIZPC\MSSQLSERVER01;Database=EduFairOS;Trusted_Connection=True;TrustServerCertificate=True;";
 			_conexion = new SqlConnection(_cadenaConexion);
 		}
@@ -37,11 +37,11 @@ namespace EduFairOS.Layers.Infrastructure.Data
 		{
 			try
 			{
-				// Verificamos de forma más segura el estado de la conexión
+				
 				if (_conexion.State != ConnectionState.Open)
 				{
 					if (_conexion.State == ConnectionState.Broken)
-						_conexion.Close(); // La reiniciamos si está "rota"
+						_conexion.Close(); 
 
 					_conexion.Open();
 					Console.WriteLine("Conexión establecida exitosamente.");
@@ -87,7 +87,7 @@ namespace EduFairOS.Layers.Infrastructure.Data
 		{
 			try
 			{
-				Conectar(); // Aseguramos que conecte siempre
+				Conectar(); // Para asegurar que conecte siempre
 				using SqlCommand command = new SqlCommand(sql, _conexion);
 				return command.ExecuteNonQuery();
 			}
@@ -113,10 +113,10 @@ namespace EduFairOS.Layers.Infrastructure.Data
 			}
 		}
 
-		// Métodos con parámetros ajustados para la arquitectura del maestro
+		// Métodos con parámetros ajustados 
 		public int EjecutarNonQuery(string query, SqlParameter[] parameters)
 		{
-			Conectar(); // Forzamos a que siempre se abra antes de ejecutar
+			Conectar(); // Para forzar a que siempre se abra antes de ejecutar
 			using SqlCommand command = new SqlCommand(query, _conexion);
 			command.Parameters.AddRange(parameters);
 			return command.ExecuteNonQuery();
@@ -128,7 +128,7 @@ namespace EduFairOS.Layers.Infrastructure.Data
 			SqlCommand command = new SqlCommand(query, _conexion);
 			if (parameters != null) command.Parameters.AddRange(parameters);
 
-			// Le quitamos el "CloseConnection" para respetar el Singleton del maestro
+			
 			return command.ExecuteReader();
 		}
 	}
